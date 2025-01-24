@@ -7,13 +7,13 @@ import {
 } from 'class-validator';
 import { Role } from '../../enums/role';
 
-export class CreateUserDto {
+export class SignupDto {
   @IsNotEmpty()
   @IsString()
   readonly name: string;
 
   @IsNotEmpty()
-  @IsEmail()
+  @IsEmail({}, { message: 'Invalid email' })
   readonly email: string;
 
   @IsNotEmpty()
