@@ -1,5 +1,3 @@
-// make a enum for category
-
 export enum BookCategory {
   FICTION = 'fiction',
   NON_FICTION = 'non-fiction',
