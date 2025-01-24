@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { BookCategory } from '../../enums/category';
+import { BookCategory } from '../../enums/book';
 
 @Schema({
   timestamps: true,

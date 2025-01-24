@@ -1,4 +1,4 @@
-import { BookCategory } from '../../enums/category';
+import { BookCategory } from '../../enums/book';
 
 export class updateBookDto {
   readonly title: string;
