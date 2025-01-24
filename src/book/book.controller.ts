@@ -6,19 +6,24 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { BookService } from './book.service';
 import { Book } from './schemas/book.schema';
-import { CreateBookDto } from './dto/update-book-dto';
-import { updateBookDto } from './dto/create-book-dto';
+import { Query as QueryType } from 'express-serve-static-core';
+import { CreateBookDto } from './dto/create-book-dto';
+import { UpdateBookDto } from './dto/update-book-dto';
 
 @Controller('book')
 export class BookController {
   constructor(private bookService: BookService) {}
 
   @Get()
-  async findAll(): Promise<Book[]> {
-    return this.bookService.findAll();
+  async findAll(
+    @Query()
+    query: QueryType,
+  ): Promise<Book[]> {
+    return this.bookService.findAll(query);
   }
 
   @Get(':id')
@@ -39,7 +44,7 @@ export class BookController {
     @Param('id')
     id: string,
     @Body()
-    book: updateBookDto,
+    book: UpdateBookDto,
   ): Promise<Book | null> {
     return this.bookService.updateBook(id, book);
   }
