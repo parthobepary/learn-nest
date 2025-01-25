@@ -6,19 +6,21 @@ import {
   Param,
   Post,
   Put,
-  Query,
+  Query, UseGuards,
 } from '@nestjs/common';
 import { BookService } from './book.service';
 import { Book } from './schemas/book.schema';
 import { Query as QueryType } from 'express-serve-static-core';
 import { CreateBookDto } from './dto/create-book-dto';
 import { UpdateBookDto } from './dto/update-book-dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('book')
 export class BookController {
   constructor(private bookService: BookService) {}
 
   @Get()
+  @UseGuards(AuthGuard())
   async findAll(
     @Query()
     query: QueryType,
