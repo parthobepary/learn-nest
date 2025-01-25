@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { Book } from './schemas/book.schema';
 import { Query } from 'express-serve-static-core';
+import { Auth } from '../auth/schemas/auth.schema';
 
 @Injectable()
 export class BookService {
@@ -23,18 +24,23 @@ export class BookService {
       .find({ ...keyword })
       .limit(perPage)
       .skip(skip)
+      .populate('user', 'name email')
       .exec();
   }
 
   async findOne(id: string): Promise<Book | null> {
-    const book = await this.bookModel.findById(id).exec();
+    const book = await this.bookModel
+      .findById(id)
+      .populate('user', 'name email role')
+      .exec();
     if (!book) {
       throw new NotFoundException('Book not found');
     }
     return book;
   }
 
-  async createBook(book: Book): Promise<Book> {
+  async createBook(book: Book, user: Auth): Promise<Book> {
+    const data = Object.assign(book, { user: user._id });
     return await this.bookModel.create(book);
   }
 

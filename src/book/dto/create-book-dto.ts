@@ -1,5 +1,6 @@
 import { BookCategory } from '../../enums/book';
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmpty, IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { Auth } from '../../auth/schemas/auth.schema';
 
 export class CreateBookDto {
   @IsNotEmpty()
@@ -13,4 +14,7 @@ export class CreateBookDto {
   @IsNotEmpty()
   @IsEnum(BookCategory)
   readonly category: BookCategory;
+
+  @IsEmpty()
+  readonly user: Auth;
 }

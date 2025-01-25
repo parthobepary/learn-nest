@@ -49,11 +49,11 @@ export class AuthService {
     return { user, token };
   }
 
-  async validateUser(id: string): Promise<User | null> {
-    const exist = mongoose.isValidObjectId(id);
+  async validateUser(user: Auth): Promise<User | null> {
+    const exist = mongoose.isValidObjectId(user._id);
     if (!exist) {
       throw new UnauthorizedException('Invalid user');
     }
-    return this.authModel.findById(id);
+    return { user };
   }
 }
