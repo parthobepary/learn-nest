@@ -49,11 +49,18 @@ export class AuthService {
     return { user, token };
   }
 
-  async validateUser(user: Auth): Promise<User | null> {
+  async validateUser(user: Auth): Promise<any> {
     const exist = mongoose.isValidObjectId(user._id);
     if (!exist) {
       throw new UnauthorizedException('Invalid user');
     }
-    return { user };
+    const userWithBooks = await this.authModel
+      .findOne({ _id: user._id })
+      .populate('books')
+      .exec();
+    if (!userWithBooks) {
+      throw new UnauthorizedException('User not found');
+    }
+    return userWithBooks;
   }
 }

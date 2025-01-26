@@ -17,3 +17,10 @@ export class Auth extends Document {
 }
 
 export const AuthSchema = SchemaFactory.createForClass(Auth);
+
+AuthSchema.virtual('books', {
+  ref: 'Book',
+  localField: '_id',
+  foreignField: 'user',
+  justOne: false,
+});
