@@ -24,3 +24,6 @@ AuthSchema.virtual('books', {
   foreignField: 'user',
   justOne: false,
 });
+
+AuthSchema.set('toObject', { virtuals: true });
+AuthSchema.set('toJSON', { virtuals: true });
