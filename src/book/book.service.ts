@@ -16,6 +16,8 @@ export class BookService {
   ) {}
 
   async findAll(query: Query): Promise<Book[]> {
+    console.log('inside service');
+
     const keyword = query.search
       ? { title: { $regex: query.search, $options: 'i' } }
       : {};
@@ -23,11 +25,6 @@ export class BookService {
     const currentPage = query.page ? Number(query.page) : 1;
     const skip = (currentPage - 1) * perPage;
 
-    // const cacheBook = await this.cacheManager.get('books_1');
-    // if (cacheBook) {
-    //   return cacheBook as Book[];
-    // }
-    console.log('inside service');
     return await this.bookModel
       .find({ ...keyword })
       .limit(perPage)

@@ -23,10 +23,13 @@ import { redisStore } from 'cache-manager-redis-yet';
     CourseModule,
     AuthModule,
     AuthorModule,
-    CacheModule.register({
+    CacheModule.registerAsync({
       isGlobal: true,
-      ttl: 30 * 1000,
-      store: redisStore,
+      useFactory: () => ({
+        store: redisStore,
+        host: 'localhost',
+        port: 6379,
+      }),
     }),
   ],
   controllers: [AppController],

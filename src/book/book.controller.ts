@@ -18,7 +18,8 @@ import { CreateBookDto } from './dto/create-book-dto';
 import { UpdateBookDto } from './dto/update-book-dto';
 import { AuthGuard } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
-import { CacheInterceptor } from '@nestjs/cache-manager';
+import { CacheInterceptor, CacheKey } from '@nestjs/cache-manager';
+import { CacheTTL } from '@nestjs/common/cache';
 
 @UseInterceptors(CacheInterceptor)
 @Controller('book')
@@ -28,6 +29,8 @@ export class BookController {
     private configService: ConfigService,
   ) {}
 
+  @CacheTTL(60 * 1000)
+  @CacheKey('books')
   @Get()
   @UseGuards(AuthGuard())
   async findAll(
