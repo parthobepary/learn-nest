@@ -1,13 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { Book } from './schemas/book.schema';
 import { Query } from 'express-serve-static-core';
 import { Auth } from '../auth/schemas/auth.schema';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class BookService {
   constructor(
+    @Inject('CACHE_MANAGER')
+    private cacheManager: Cache,
     @InjectModel(Book.name)
     private bookModel: mongoose.Model<Book>,
   ) {}
@@ -20,7 +23,12 @@ export class BookService {
     const currentPage = query.page ? Number(query.page) : 1;
     const skip = (currentPage - 1) * perPage;
 
-    return this.bookModel
+    // const cacheBook = await this.cacheManager.get('books_1');
+    // if (cacheBook) {
+    //   return cacheBook as Book[];
+    // }
+    console.log('inside service');
+    return await this.bookModel
       .find({ ...keyword })
       .limit(perPage)
       .skip(skip)

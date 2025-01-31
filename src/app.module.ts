@@ -7,20 +7,27 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { CourseModule } from './course/course.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthorModule } from './author/author.module';
+import config from './config/config';
+import { CacheModule } from '@nestjs/cache-manager';
+import { redisStore } from 'cache-manager-redis-yet';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.env',
+      cache: true,
       isGlobal: true,
+      load: [config],
     }),
-    MongooseModule.forRoot(
-      process.env.DB_URL || 'mongodb://localhost/book-cart',
-    ),
+    MongooseModule.forRoot(config().db.url),
     BookModule,
     CourseModule,
     AuthModule,
     AuthorModule,
+    CacheModule.register({
+      isGlobal: true,
+      ttl: 30 * 1000,
+      store: redisStore,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
