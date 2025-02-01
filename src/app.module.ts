@@ -10,6 +10,8 @@ import { AuthorModule } from './author/author.module';
 import config from './config/config';
 import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
+import { BullModule } from '@nestjs/bullmq';
+import { VideoModule } from './video/video.module';
 
 @Module({
   imports: [
@@ -31,6 +33,16 @@ import { redisStore } from 'cache-manager-redis-yet';
         port: 6379,
       }),
     }),
+    BullModule.forRoot({
+      connection: { host: 'localhost', port: 6379 },
+      defaultJobOptions: {
+        attempts: 3,
+        removeOnComplete: 10,
+        removeOnFail: 10,
+      },
+    }),
+    BullModule.registerQueue({ name: 'video' }),
+    VideoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
